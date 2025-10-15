@@ -373,7 +373,7 @@ main {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   cursor: grab;
-  scroll-behavior: auto; /* ALTERAÇÃO ANDROID: remove tremida causada pelo smooth scroll */
+  scroll-snap-type: x mandatory; /* mantém o snap funcionando */
 }
 
 .carousel-container:active {
@@ -382,13 +382,15 @@ main {
 
 .carousel-item {
   flex: 0 0 auto;
-  width: 220px;
+  /*width: 220px;*/
   height: 300px;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow);
   cursor: pointer;
   transition: transform 0.3s;
+  width: 70vw; /* Reduz a largura para suavizar o swipe no Android */
+  scroll-snap-align: start; /* mantém travamento do item no final do swipe */
 }
 
 .carousel-item img {
