@@ -195,6 +195,7 @@ body[data-theme="dark"] .icon-moon {
     padding: 12px 0;
     border-radius: 0 0 12px 12px;
     display: none;
+    z-index: 1001; /* ALTERAÇÃO ANDROID: garante que o menu fique acima de tudo */
   }
 
   .nav-toggle nav.show {
@@ -369,6 +370,7 @@ main {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   cursor: grab;
+  scroll-behavior: auto; /* ALTERAÇÃO ANDROID: remove tremida causada pelo smooth scroll */
 }
 
 .carousel-container:active {
@@ -391,6 +393,7 @@ main {
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
+  will-change: transform; /* ALTERAÇÃO ANDROID: evita tremida ao deslizar no Android */
 }
 
 .carousel-item:hover img {

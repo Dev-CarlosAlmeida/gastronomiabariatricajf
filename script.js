@@ -21,9 +21,19 @@ themeToggleBtn.addEventListener("click", () => {
 const menuToggleBtn = document.querySelector('.menu-toggle');
 const navMenu = document.querySelector('.nav-toggle nav');
 
-menuToggleBtn.addEventListener('click', () => {
+/*menuToggleBtn.addEventListener('click', () => {
   navMenu.classList.toggle('show');
-});
+});*/
+
+function toggleMenu(e) {
+  e.preventDefault(); // ALTERAÇÃO ANDROID: evita toque duplo no Android
+  navMenu.classList.toggle('show');
+}
+
+// Dispara tanto no click quanto no touchstart
+menuToggleBtn.addEventListener('click', toggleMenu);       // iOS e desktop
+menuToggleBtn.addEventListener('touchstart', toggleMenu); // ALTERAÇÃO ANDROID: necessário para funcionar no Android
+
 
 // Fecha menu automaticamente ao clicar em link (mobile)
 const navLinks = navMenu.querySelectorAll('a');
