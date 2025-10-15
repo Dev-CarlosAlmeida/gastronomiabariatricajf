@@ -377,7 +377,10 @@ main {
     /* ================= ADICIONADO ================= */
   transform: translate3d(0, 0, 0); /* força GPU, deixa swipe suave no Android */
   will-change: transform;          /* informa ao navegador que vai mudar, melhora performance */
-
+  transform: translate3d(0, 0, 0); /* força a GPU renderizar, evitando travadas */
+  backface-visibility: hidden;    /* ajuda a suavizar o scroll */
+  -webkit-transform: translate3d(0,0,0); /* para compatibilidade com Webkit */
+  will-change: transform;          /* otimiza para movimentação */
 }
 
 .carousel-container:active {
@@ -397,6 +400,8 @@ main {
   scroll-snap-align: start; /* mantém travamento do item no final do swipe */
    /* ================= ADICIONADO ================= */
   will-change: transform; /* ajuda Android a renderizar melhor o swipe */
+    backface-visibility: hidden; /* previne flickering no Android */
+  -webkit-transform: translate3d(0,0,0); /* força GPU */
 }
 
 .carousel-item img {
