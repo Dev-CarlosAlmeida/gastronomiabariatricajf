@@ -374,6 +374,10 @@ main {
   -webkit-overflow-scrolling: touch;
   cursor: grab;
   scroll-snap-type: x mandatory; /* mantém o snap funcionando */
+    /* ================= ADICIONADO ================= */
+  transform: translate3d(0, 0, 0); /* força GPU, deixa swipe suave no Android */
+  will-change: transform;          /* informa ao navegador que vai mudar, melhora performance */
+
 }
 
 .carousel-container:active {
@@ -391,6 +395,8 @@ main {
   transition: transform 0.3s;
   width: 70vw; /* Reduz a largura para suavizar o swipe no Android */
   scroll-snap-align: start; /* mantém travamento do item no final do swipe */
+   /* ================= ADICIONADO ================= */
+  will-change: transform; /* ajuda Android a renderizar melhor o swipe */
 }
 
 .carousel-item img {
