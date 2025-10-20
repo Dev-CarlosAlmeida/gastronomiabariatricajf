@@ -374,13 +374,15 @@ main {
   -webkit-overflow-scrolling: touch;
   cursor: grab;
   scroll-snap-type: x mandatory; /* mantém o snap funcionando */
-    /* ================= ADICIONADO ================= */
+      /* OTIMIZAÇÃO ANDROID */
   transform: translate3d(0, 0, 0); /* força GPU, deixa swipe suave no Android */
-  will-change: transform;          /* informa ao navegador que vai mudar, melhora performance */
+  will-change: transform;          /* melhora performance */
   transform: translate3d(0, 0, 0); /* força a GPU renderizar, evitando travadas */
-  backface-visibility: hidden;    /* ajuda a suavizar o scroll */
-  -webkit-transform: translate3d(0,0,0); /* para compatibilidade com Webkit */
+  backface-visibility: hidden;    /* suaviza o scroll */
+  -webkit-transform: translate3d(0,0,0); /* compatível com Webkit */
   will-change: transform;          /* otimiza para movimentação */
+  touch-action: pan-y;     /* evita travadas no Android */
+
 }
 
 .carousel-container:active {
@@ -400,8 +402,7 @@ main {
   scroll-snap-align: start; /* mantém travamento do item no final do swipe */
    /* ================= ADICIONADO ================= */
   will-change: transform; /* ajuda Android a renderizar melhor o swipe */
-    backface-visibility: hidden; /* previne flickering no Android */
-  -webkit-transform: translate3d(0,0,0); /* força GPU */
+  backface-visibility: hidden; /* previne flickering no Android */
 }
 
 .carousel-item img {

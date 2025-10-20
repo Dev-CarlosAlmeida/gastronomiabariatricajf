@@ -52,47 +52,69 @@ window.addEventListener('resize', () => {
   }
 });
 
-// CARROSSEL COM SWIPE
+// === CARROSSEL COM SWIPE OTIMIZADO ===
 const carouselContainer = document.getElementById('carousel');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
 
 let isDragging = false;
-let startX;
-let scrollLeft;
+let startX = 0;
+let scrollLeft = 0;
+let currentWalk = 0;
+let rafId = null;
 
-// Função para arraste com mouse
-carouselContainer.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  startX = e.pageX - carouselContainer.offsetLeft;
-  scrollLeft = carouselContainer.scrollLeft;
-});
+// Função para movimento suave com requestAnimationFrame
+function smoothScroll() {
+  carouselContainer.scrollLeft = scrollLeft - currentWalk;
+  rafId = requestAnimationFrame(smoothScroll);
+}
 
-carouselContainer.addEventListener('mouseleave', () => isDragging = false);
-carouselContainer.addEventListener('mouseup', () => isDragging = false);
-carouselContainer.addEventListener('mousemove', (e) => {
-  if(!isDragging) return;
-  e.preventDefault();
-  const x = e.pageX - carouselContainer.offsetLeft;
-  const walk = (x - startX) * 2;
-  carouselContainer.scrollLeft = scrollLeft - walk;
-});
-
-// Swipe touch (mobile)
+// === TOUCH (para Android / iOS) ===
 carouselContainer.addEventListener('touchstart', (e) => {
   isDragging = true;
   startX = e.touches[0].pageX - carouselContainer.offsetLeft;
   scrollLeft = carouselContainer.scrollLeft;
-});
-carouselContainer.addEventListener('touchend', () => isDragging = false);
+  cancelAnimationFrame(rafId);
+}, { passive: true });
+
 carouselContainer.addEventListener('touchmove', (e) => {
   if(!isDragging) return;
   const x = e.touches[0].pageX - carouselContainer.offsetLeft;
-  const walk = (x - startX) * 2;
-  carouselContainer.scrollLeft = scrollLeft - walk;
+  currentWalk = (x - startX) * 2;
+  if (!rafId) rafId = requestAnimationFrame(smoothScroll);
+}, { passive: true });
+
+carouselContainer.addEventListener('touchend', () => {
+  isDragging = false;
+  cancelAnimationFrame(rafId);
+  rafId = null;
+}, { passive: true });
+
+// === MOUSE (para desktop) ===
+carouselContainer.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  startX = e.pageX - carouselContainer.offsetLeft;
+  scrollLeft = carouselContainer.scrollLeft;
+  cancelAnimationFrame(rafId);
+});
+carouselContainer.addEventListener('mouseup', () => {
+  isDragging = false;
+  cancelAnimationFrame(rafId);
+  rafId = null;
+});
+carouselContainer.addEventListener('mouseleave', () => {
+  isDragging = false;
+  cancelAnimationFrame(rafId);
+  rafId = null;
+});
+carouselContainer.addEventListener('mousemove', (e) => {
+  if(!isDragging) return;
+  const x = e.pageX - carouselContainer.offsetLeft;
+  currentWalk = (x - startX) * 2;
+  if (!rafId) rafId = requestAnimationFrame(smoothScroll);
 });
 
-// Botões de navegação
+// === BOTÕES DE NAVEGAÇÃO ===
 const scrollAmount = 250;
 prevBtn.addEventListener('click', () => {
   carouselContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
